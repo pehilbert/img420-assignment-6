@@ -5,8 +5,8 @@ public partial class Enemy : CharacterBody2D
 {
     [Export]
     public int MaxHealth { get; set; } = 100;
-
-    public int CurrentHealth { get; private set; }
+    [Export]
+    public float AttackCooldown = 1.0f;
 
     [Export]
     public PackedScene AllyScene { get; set; }
@@ -14,10 +14,14 @@ public partial class Enemy : CharacterBody2D
     [Export]
     public NodePath BehaviorTreeRootPath { get; set; }
 
-    private BTNode _behaviorTreeRoot;
-
     [Export]
     public Label StateLabel { get; set; }
+
+    public int CurrentHealth { get; private set; }
+    public bool CanAttack = true;
+    
+    private BTNode _behaviorTreeRoot;
+    private Timer AttackTimer;
 
     public override void _Ready()
     {
@@ -34,6 +38,10 @@ public partial class Enemy : CharacterBody2D
         }
 
         // TODO: Initialize navigation, detection, references to player, etc.
+        AttackTimer = new Timer();
+        AttackTimer.WaitTime = AttackCooldown;
+        AttackTimer.Timeout += () => CanAttack = true;
+        AddChild(AttackTimer);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -49,5 +57,11 @@ public partial class Enemy : CharacterBody2D
     {
         // TODO: Reduce health, clamp, update UI, check death
         throw new System.NotImplementedException();
+    }
+
+    public void Attack()
+    {
+        CanAttack = false;
+        AttackTimer.Start();
     }
 }

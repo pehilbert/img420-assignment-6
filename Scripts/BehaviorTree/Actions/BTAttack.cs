@@ -9,8 +9,8 @@ namespace EnemyAI.BehaviorTree.Actions
 
         public override BTState Tick(double delta)
         {
-            // TODO: Trigger attack animation and apply damage to player
-            throw new System.NotImplementedException();
+            Enemy.Attack();
+            return BTState.Success;
         }
     }
 }
