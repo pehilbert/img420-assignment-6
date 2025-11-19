@@ -15,9 +15,17 @@ namespace EnemyAI.BehaviorTree
         [Export]
         public Enemy Enemy { get; set; }
 
-        public virtual void Initialize()
+        public virtual void Initialize(Enemy enemy)
         {
-            // TODO: Optional initialization logic for node
+            Enemy = enemy;
+
+            foreach (BTNode child in GetChildren())
+            {
+                if (child != null)
+                {
+                    child.Initialize(enemy);
+                }
+            }
         }
 
         public abstract BTState Tick(double delta);

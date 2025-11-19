@@ -13,7 +13,8 @@ namespace EnemyAI.BehaviorTree.Actions
         public override BTState Tick(double delta)
         {
             // TODO: Move away from player using navigation
-            throw new System.NotImplementedException();
+            Enemy.StateLabel.Text = "Fleeing";
+            return BTState.Success;
         }
     }
 }

@@ -22,11 +22,9 @@ namespace EnemyAI.BehaviorTree.Conditions
         public override BTState Tick(double delta)
         {
             // TODO: Use Mode to choose which radius to compare against distance to player
-            Player player = GetNode<Player>("/Player");
-
-            if (player != null)
+            if (Enemy.Player != null)
             {
-                float distance = Enemy.GlobalPosition.DistanceTo(player.GlobalPosition);
+                float distance = Enemy.GlobalPosition.DistanceTo(Enemy.Player.GlobalPosition);
 
                 switch (Mode)
                 {

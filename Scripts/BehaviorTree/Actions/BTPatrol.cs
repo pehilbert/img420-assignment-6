@@ -18,7 +18,8 @@ namespace EnemyAI.BehaviorTree.Actions
         public override BTState Tick(double delta)
         {
             // TODO: Move between patrol waypoints in a loop
-            throw new System.NotImplementedException();
+            Enemy.StateLabel.Text = "Patrolling";
+            return BTState.Success;
         }
     }
 }

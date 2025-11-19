@@ -1,0 +1,109 @@
+[gd_scene load_steps=17 format=3 uid="uid://ql7i0cersco7"]
+
+[ext_resource type="Script" uid="uid://c5po0arcmp7ev" path="res://Scripts/Enemy.cs" id="1_hghv2"]
+[ext_resource type="Texture2D" uid="uid://6ru1vpouku81" path="res://Assets/icon.svg" id="2_1f0kj"]
+[ext_resource type="Script" uid="uid://0qqkj6roxoed" path="res://Scripts/BehaviorTree/Composites/BTSelector.cs" id="3_afpow"]
+[ext_resource type="Script" uid="uid://dx4fkisbjg1rf" path="res://Scripts/BehaviorTree/Composites/BTSequence.cs" id="4_m4x7e"]
+[ext_resource type="Script" uid="uid://cmb38gay6yxqf" path="res://Scripts/BehaviorTree/Conditions/BTIsHealthCritical.cs" id="5_vt4ob"]
+[ext_resource type="Script" uid="uid://cud7qsqsreias" path="res://Scripts/BehaviorTree/Actions/BTFlee.cs" id="6_hgeoe"]
+[ext_resource type="Script" uid="uid://uuot6axstsv6" path="res://Scripts/BehaviorTree/Conditions/BTIsHealthLow.cs" id="7_tk7xo"]
+[ext_resource type="Script" uid="uid://df0ce42ai4jis" path="res://Scripts/BehaviorTree/Conditions/BTAreAlliesAvailable.cs" id="8_scl1n"]
+[ext_resource type="Script" uid="uid://ch1k2k2qu6omg" path="res://Scripts/BehaviorTree/Actions/BTSummonAlly.cs" id="9_dhkrs"]
+[ext_resource type="Script" uid="uid://c8sb7fxgtl727" path="res://Scripts/BehaviorTree/Conditions/BTIsPlayerInRange.cs" id="10_5xdhn"]
+[ext_resource type="Script" uid="uid://ohn0gi4h076q" path="res://Scripts/BehaviorTree/Conditions/BTCanAttack.cs" id="11_4jyny"]
+[ext_resource type="Script" uid="uid://1p0kmbms5w1w" path="res://Scripts/BehaviorTree/Actions/BTAttack.cs" id="12_vh8xy"]
+[ext_resource type="Script" uid="uid://ti0shh3p18qv" path="res://Scripts/BehaviorTree/Actions/BTChasePlayer.cs" id="13_qjcj6"]
+[ext_resource type="Script" uid="uid://cdpbxqnxtyjt0" path="res://Scripts/BehaviorTree/Actions/BTPatrol.cs" id="14_4ycey"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_afpow"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_1f0kj")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
+size = Vector2(125, 127)
+
+[node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("StateLabel")]
+modulate = Color(1, 0, 0, 1)
+script = ExtResource("1_hghv2")
+BehaviorTreeRootPath = NodePath("BehaviorTree")
+StateLabel = NodePath("Label")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_afpow")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.5, 0.5)
+shape = SubResource("RectangleShape2D_1f0kj")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -21.0
+offset_top = -94.0
+offset_right = 19.0
+offset_bottom = -71.0
+text = "State"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BehaviorTree" type="Node2D" parent="."]
+script = ExtResource("3_afpow")
+
+[node name="EmergencyFlee" type="Node2D" parent="BehaviorTree"]
+script = ExtResource("4_m4x7e")
+
+[node name="IsHealthCritical" type="Node2D" parent="BehaviorTree/EmergencyFlee"]
+script = ExtResource("5_vt4ob")
+
+[node name="Flee" type="Node2D" parent="BehaviorTree/EmergencyFlee"]
+script = ExtResource("6_hgeoe")
+
+[node name="CallForHelp" type="Node2D" parent="BehaviorTree"]
+script = ExtResource("4_m4x7e")
+
+[node name="IsHealthLow" type="Node2D" parent="BehaviorTree/CallForHelp"]
+script = ExtResource("7_tk7xo")
+
+[node name="AreAlliesAvailable" type="Node2D" parent="BehaviorTree/CallForHelp"]
+script = ExtResource("8_scl1n")
+
+[node name="SummonAlly" type="Node2D" parent="BehaviorTree/CallForHelp"]
+script = ExtResource("9_dhkrs")
+
+[node name="Combat" type="Node2D" parent="BehaviorTree"]
+script = ExtResource("4_m4x7e")
+
+[node name="IsPlayerDetected" type="Node2D" parent="BehaviorTree/Combat"]
+script = ExtResource("10_5xdhn")
+
+[node name="CombatOptions" type="Node2D" parent="BehaviorTree/Combat"]
+script = ExtResource("3_afpow")
+
+[node name="AttackSequence" type="Node2D" parent="BehaviorTree/Combat/CombatOptions"]
+script = ExtResource("4_m4x7e")
+
+[node name="IsPlayerInAttackRange" type="Node2D" parent="BehaviorTree/Combat/CombatOptions/AttackSequence"]
+script = ExtResource("10_5xdhn")
+
+[node name="CanAttack" type="Node2D" parent="BehaviorTree/Combat/CombatOptions/AttackSequence"]
+script = ExtResource("11_4jyny")
+
+[node name="Attack" type="Node2D" parent="BehaviorTree/Combat/CombatOptions/AttackSequence"]
+script = ExtResource("12_vh8xy")
+
+[node name="ChaseSequence" type="Node2D" parent="BehaviorTree/Combat/CombatOptions"]
+script = ExtResource("4_m4x7e")
+
+[node name="ChasePlayer" type="Node2D" parent="BehaviorTree/Combat/CombatOptions/ChaseSequence"]
+script = ExtResource("13_qjcj6")
+
+[node name="PatrolSequence" type="Node2D" parent="BehaviorTree"]
+script = ExtResource("4_m4x7e")
+
+[node name="Patrol" type="Node2D" parent="BehaviorTree/PatrolSequence"]
+script = ExtResource("14_4ycey")

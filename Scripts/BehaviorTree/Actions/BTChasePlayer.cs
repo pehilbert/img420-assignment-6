@@ -10,7 +10,8 @@ namespace EnemyAI.BehaviorTree.Actions
         public override BTState Tick(double delta)
         {
             // TODO: Move towards player using NavigationAgent2D or similar
-            throw new System.NotImplementedException();
+            Enemy.StateLabel.Text = "Chasing";
+            return BTState.Success;
         }
     }
 }

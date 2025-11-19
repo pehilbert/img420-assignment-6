@@ -9,6 +9,7 @@ namespace EnemyAI.BehaviorTree.Actions
 
         public override BTState Tick(double delta)
         {
+            Enemy.StateLabel.Text = "Attacking";
             Enemy.Attack();
             return BTState.Success;
         }
