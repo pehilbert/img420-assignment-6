@@ -12,7 +12,20 @@ namespace EnemyAI.BehaviorTree
         public override BTState Tick(double delta)
         {
             // TODO: Selector behavior (try children until one succeeds or runs)
-            throw new System.NotImplementedException();
+            foreach (BTNode child in GetChildren())
+            {
+                if (child != null)
+                {
+                    BTState result = child.Tick(delta);
+
+                    if (result == BTState.Success)
+                    {
+                        return BTState.Success;
+                    }
+                }
+            }
+
+            return BTState.Failure;
         }
     }
 }

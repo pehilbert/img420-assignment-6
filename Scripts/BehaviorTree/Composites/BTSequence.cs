@@ -12,7 +12,20 @@ namespace EnemyAI.BehaviorTree
         public override BTState Tick(double delta)
         {
             // TODO: Sequence behavior (all children must succeed in order)
-            throw new System.NotImplementedException();
+            foreach (BTNode child in GetChildren())
+            {
+                if (child != null)
+                {
+                    BTState result = child.Tick(delta);
+
+                    if (result == BTState.Failure)
+                    {
+                        return BTState.Failure;
+                    }
+                }
+            }
+
+            return BTState.Success;
         }
     }
 }
