@@ -15,21 +15,34 @@ public partial class Enemy : CharacterBody2D
 	public NodePath BehaviorTreeRootPath { get; set; }
 
 	[Export]
+	public NodePath NavigationAgentPath { get; set; }
+
+	[Export]
 	public Label StateLabel { get; set; }
 
 	[Export]
 	public NodePath PlayerPath { get; set; }
 
+	[Export]
+	public NodePath PatrolPointsPath { get; set; }
+
 	public int CurrentHealth { get; private set; }
 	public bool CanAttack = true;
 	public Player Player;
+	public NavigationAgent2D NavigationAgent;
+	public Node2D PatrolPoints;
 	
 	private BTNode _behaviorTreeRoot;
-	private Timer AttackTimer;
+	private Timer _attackTimer;
 
 	public override void _Ready()
 	{
 		CurrentHealth = MaxHealth;
+
+		if (PatrolPointsPath != null)
+		{
+			PatrolPoints = GetNode<Node2D>(PatrolPointsPath);
+		}
 
 		if (BehaviorTreeRootPath != null)
 		{
@@ -39,14 +52,21 @@ public partial class Enemy : CharacterBody2D
 				_behaviorTreeRoot.Initialize(this);
 			}
 		}
+		
+		if (PlayerPath != null)
+		{
+			Player = GetNode<Player>(PlayerPath);
+		}
 
-		// TODO: Initialize navigation, detection, references to player, etc.
-		Player = GetNode<Player>(PlayerPath);
+		if (NavigationAgentPath != null)
+		{
+			NavigationAgent = GetNode<NavigationAgent2D>(NavigationAgentPath);
+		}
 
-		AttackTimer = new Timer();
-		AttackTimer.WaitTime = AttackCooldown;
-		AttackTimer.Timeout += () => CanAttack = true;
-		AddChild(AttackTimer);
+        _attackTimer = new Timer();
+        _attackTimer.WaitTime = AttackCooldown;
+        _attackTimer.Timeout += () => CanAttack = true;
+		AddChild(_attackTimer);
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -59,13 +79,19 @@ public partial class Enemy : CharacterBody2D
 
 	public void TakeDamage(int amount)
 	{
-		// TODO: Reduce health, clamp, update UI, check death
-		throw new System.NotImplementedException();
-	}
+        if (CurrentHealth < amount)
+        {
+            CurrentHealth = 0;
+        }
+        else
+        {
+            CurrentHealth -= amount;
+        }
+    }
 
-	public void Attack()
+	public void StartAttackCooldown()
 	{
 		CanAttack = false;
-		AttackTimer.Start();
+        _attackTimer.Start();
 	}
 }

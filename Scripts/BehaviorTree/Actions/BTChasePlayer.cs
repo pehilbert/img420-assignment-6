@@ -9,7 +9,20 @@ namespace EnemyAI.BehaviorTree.Actions
 
         public override BTState Tick(double delta)
         {
-            // TODO: Move towards player using NavigationAgent2D or similar
+            if (Enemy.NavigationAgent != null)
+            {
+                Enemy.NavigationAgent.TargetPosition = Enemy.Player.GlobalPosition;
+
+                if (!Enemy.NavigationAgent.IsNavigationFinished())
+                {
+                    Vector2 nextPos = Enemy.NavigationAgent.GetNextPathPosition();
+                    Vector2 direction = (nextPos - Enemy.GlobalPosition).Normalized();
+                    
+                    Enemy.Velocity = direction * MoveSpeed;
+                    Enemy.MoveAndSlide();
+                }
+            }
+
             Enemy.StateLabel.Text = "Chasing";
             return BTState.Success;
         }

@@ -12,7 +12,21 @@ namespace EnemyAI.BehaviorTree.Actions
 
         public override BTState Tick(double delta)
         {
-            // TODO: Move away from player using navigation
+            if (Enemy.NavigationAgent != null)
+            {
+                Vector2 fleeDirection = Enemy.Player.GlobalPosition - Enemy.GlobalPosition;
+                Enemy.NavigationAgent.TargetPosition = fleeDirection * FleeDistance;
+
+                if (!Enemy.NavigationAgent.IsNavigationFinished())
+                {
+                    Vector2 nextPos = Enemy.NavigationAgent.GetNextPathPosition();
+                    Vector2 direction = (nextPos - Enemy.GlobalPosition).Normalized();
+
+                    Enemy.Velocity = direction * FleeSpeed;
+                    Enemy.MoveAndSlide();
+                }
+            }
+
             Enemy.StateLabel.Text = "Fleeing";
             return BTState.Success;
         }

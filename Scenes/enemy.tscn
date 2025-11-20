@@ -1,7 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://ql7i0cersco7"]
+[gd_scene load_steps=18 format=3 uid="uid://ql7i0cersco7"]
 
 [ext_resource type="Script" uid="uid://c5po0arcmp7ev" path="res://Scripts/Enemy.cs" id="1_hghv2"]
 [ext_resource type="Texture2D" uid="uid://6ru1vpouku81" path="res://Assets/icon.svg" id="2_1f0kj"]
+[ext_resource type="PackedScene" uid="uid://bscn1f5cpfk8u" path="res://Scenes/health_bar.tscn" id="2_vt4ob"]
 [ext_resource type="Script" uid="uid://0qqkj6roxoed" path="res://Scripts/BehaviorTree/Composites/BTSelector.cs" id="3_afpow"]
 [ext_resource type="Script" uid="uid://dx4fkisbjg1rf" path="res://Scripts/BehaviorTree/Composites/BTSequence.cs" id="4_m4x7e"]
 [ext_resource type="Script" uid="uid://cmb38gay6yxqf" path="res://Scripts/BehaviorTree/Conditions/BTIsHealthCritical.cs" id="5_vt4ob"]
@@ -30,12 +31,16 @@ animations = [{
 size = Vector2(125, 127)
 
 [node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("StateLabel")]
-modulate = Color(1, 0, 0, 1)
 script = ExtResource("1_hghv2")
 BehaviorTreeRootPath = NodePath("BehaviorTree")
+NavigationAgentPath = NodePath("NavigationAgent2D")
 StateLabel = NodePath("Label")
 
+[node name="HealthBar" parent="." instance=ExtResource("2_vt4ob")]
+position = Vector2(0, 80)
+
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+modulate = Color(0.956734, 0, 0.377511, 1)
 sprite_frames = SubResource("SpriteFrames_afpow")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -107,3 +112,5 @@ script = ExtResource("4_m4x7e")
 
 [node name="Patrol" type="Node2D" parent="BehaviorTree/PatrolSequence"]
 script = ExtResource("14_4ycey")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]

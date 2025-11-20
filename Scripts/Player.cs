@@ -11,15 +11,11 @@ public partial class Player : CharacterBody2D
 	public float MoveSpeed { get; set; } = 200f;
 
 	[Export]
-	public Node2D HealthBar { get; set; }
-
-	[Export]
 	public Area2D AttackArea { get; set; }
 
 	public override void _Ready()
 	{
 		CurrentHealth = MaxHealth;
-		// TODO: Init animations, attack area shape, etc.
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -37,7 +33,15 @@ public partial class Player : CharacterBody2D
 
 	public void TakeDamage(int amount)
 	{
-		// TODO: Apply damage, update health bar, handle death
-		throw new System.NotImplementedException();
+		if (CurrentHealth < amount)
+		{
+			CurrentHealth = 0;
+		}
+		else
+		{
+			CurrentHealth -= amount;
+		}
+
+		GD.Print($"CurrentHealth={CurrentHealth}");
 	}
 }

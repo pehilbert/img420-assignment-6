@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=3 uid="uid://bscn1f5cpfk8u"]
+
+[ext_resource type="Script" uid="uid://i85cv723sxng" path="res://Scripts/HealthBar.cs" id="1_78m4n"]
+
+[node name="HealthBar" type="Node2D"]
+script = ExtResource("1_78m4n")
+ProgressBarPath = NodePath("Progress")
+
+[node name="Background" type="Polygon2D" parent="."]
+color = Color(0.59063, 0.142175, 0.213031, 1)
+polygon = PackedVector2Array(-88, -8, 88, -8, 88, 8, -88, 8)
+uv = PackedVector2Array(1.13971, -1.38882, 176, 0, 176, 16, 0, 16)
+
+[node name="Progress" type="Polygon2D" parent="."]
+position = Vector2(-88, 0)
+color = Color(0.171061, 0.380816, 0.315923, 1)
+polygon = PackedVector2Array(0, -8, 176, -8, 176, 8, -7.62939e-06, 8)
+uv = PackedVector2Array(1.13971, -1.38882, 176, 0, 176, 16, 0, 16)

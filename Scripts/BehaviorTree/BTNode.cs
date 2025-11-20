@@ -18,12 +18,13 @@ namespace EnemyAI.BehaviorTree
         public virtual void Initialize(Enemy enemy)
         {
             Enemy = enemy;
+            GD.Print($"Initializing {this.Name}");
 
-            foreach (BTNode child in GetChildren())
+            foreach (Node child in GetChildren())
             {
-                if (child != null)
+                if (child is BTNode btChild)
                 {
-                    child.Initialize(enemy);
+                    btChild.Initialize(enemy);
                 }
             }
         }
