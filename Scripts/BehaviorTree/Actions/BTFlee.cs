@@ -14,7 +14,7 @@ namespace EnemyAI.BehaviorTree.Actions
         {
             if (Enemy.NavigationAgent != null)
             {
-                Vector2 fleeDirection = Enemy.Player.GlobalPosition - Enemy.GlobalPosition;
+                Vector2 fleeDirection = -(Enemy.Player.GlobalPosition - Enemy.GlobalPosition);
                 Enemy.NavigationAgent.TargetPosition = fleeDirection * FleeDistance;
 
                 if (!Enemy.NavigationAgent.IsNavigationFinished())

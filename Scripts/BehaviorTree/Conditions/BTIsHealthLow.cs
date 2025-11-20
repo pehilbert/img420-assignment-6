@@ -8,7 +8,7 @@ namespace EnemyAI.BehaviorTree.Conditions
 
         public override BTState Tick(double delta)
         {
-            return Enemy.CurrentHealth / Enemy.MaxHealth * 100 < LowThresholdPercent ? BTState.Success : BTState.Failure;
+            return ((float)Enemy.CurrentHealth / (float)Enemy.MaxHealth) * 100 < LowThresholdPercent ? BTState.Success : BTState.Failure;
         }
     }
 }

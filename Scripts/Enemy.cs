@@ -82,6 +82,7 @@ public partial class Enemy : CharacterBody2D
         if (CurrentHealth < amount)
         {
             CurrentHealth = 0;
+			QueueFree();
         }
         else
         {

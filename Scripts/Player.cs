@@ -36,12 +36,11 @@ public partial class Player : CharacterBody2D
 		if (CurrentHealth < amount)
 		{
 			CurrentHealth = 0;
+			QueueFree();
 		}
 		else
 		{
 			CurrentHealth -= amount;
 		}
-
-		GD.Print($"CurrentHealth={CurrentHealth}");
 	}
 }

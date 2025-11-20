@@ -28,7 +28,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1f0kj"]
-size = Vector2(125, 127)
+size = Vector2(16, 16)
 
 [node name="Enemy" type="CharacterBody2D" node_paths=PackedStringArray("StateLabel")]
 script = ExtResource("1_hghv2")
@@ -37,21 +37,23 @@ NavigationAgentPath = NodePath("NavigationAgent2D")
 StateLabel = NodePath("Label")
 
 [node name="HealthBar" parent="." instance=ExtResource("2_vt4ob")]
-position = Vector2(0, 80)
+position = Vector2(0, 10)
+scale = Vector2(0.125, 0.125)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 modulate = Color(0.956734, 0, 0.377511, 1)
+scale = Vector2(0.125, 0.125)
 sprite_frames = SubResource("SpriteFrames_afpow")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.5, 0.5)
 shape = SubResource("RectangleShape2D_1f0kj")
 
 [node name="Label" type="Label" parent="."]
-offset_left = -21.0
-offset_top = -94.0
-offset_right = 19.0
-offset_bottom = -71.0
+offset_left = -20.0
+offset_top = -24.0
+offset_right = 20.0
+offset_bottom = -8.0
+theme_override_font_sizes/font_size = 8
 text = "State"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -67,6 +69,7 @@ script = ExtResource("5_vt4ob")
 
 [node name="Flee" type="Node2D" parent="BehaviorTree/EmergencyFlee"]
 script = ExtResource("6_hgeoe")
+FleeSpeed = 40.0
 
 [node name="CallForHelp" type="Node2D" parent="BehaviorTree"]
 script = ExtResource("4_m4x7e")
@@ -85,6 +88,8 @@ script = ExtResource("4_m4x7e")
 
 [node name="IsPlayerDetected" type="Node2D" parent="BehaviorTree/Combat"]
 script = ExtResource("10_5xdhn")
+DetectionRange = 64.0
+AttackRange = 20.0
 
 [node name="CombatOptions" type="Node2D" parent="BehaviorTree/Combat"]
 script = ExtResource("3_afpow")
@@ -106,11 +111,13 @@ script = ExtResource("4_m4x7e")
 
 [node name="ChasePlayer" type="Node2D" parent="BehaviorTree/Combat/CombatOptions/ChaseSequence"]
 script = ExtResource("13_qjcj6")
+MoveSpeed = 60.0
 
 [node name="PatrolSequence" type="Node2D" parent="BehaviorTree"]
 script = ExtResource("4_m4x7e")
 
 [node name="Patrol" type="Node2D" parent="BehaviorTree/PatrolSequence"]
 script = ExtResource("14_4ycey")
+PatrolSpeed = 50.0
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
